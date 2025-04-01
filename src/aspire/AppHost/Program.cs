@@ -16,6 +16,12 @@ var sqlServer = builder
 var catalogDb = sqlServer.AddDatabase("catalogdb");
 
 
+var redisDb = builder.AddRedis("cache")
+                     .WithRedisInsight()
+                     .WithDataVolume()
+                     .WithLifetime(ContainerLifetime.Persistent);
+
+
 #endregion
 
 #region projects
@@ -23,6 +29,17 @@ var catalogDb = sqlServer.AddDatabase("catalogdb");
 var catalog =  builder.AddProject<Projects.Catalog>("catalog")
                       .WithReference(catalogDb)
                       .WaitFor(catalogDb);
+
+var basket =  builder.AddProject<Projects.Basket>("basket")
+                     .WithReference(redisDb)
+                     .WaitFor(redisDb);
+
+
+
+#endregion
+
+#region
+
 
 
 #endregion
