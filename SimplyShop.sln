@@ -9,8 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "aspire", "aspire", "{6CC98F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "services", "services", "{AAB0B109-1F43-41FE-BEA9-F4B43FC10709}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "web-ui", "web-ui", "{576B110E-17E4-4F16-BA9E-D3856CD7FEC8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppHost", "src\aspire\AppHost\AppHost.csproj", "{67B45BEF-D249-4DA6-A335-66735950B6D7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceDefaults", "src\aspire\ServiceDefaults\ServiceDefaults.csproj", "{D4CDBA3D-0ADF-44CE-8531-CE1BF9CAC11B}"
