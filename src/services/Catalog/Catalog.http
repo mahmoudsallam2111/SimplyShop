@@ -29,6 +29,13 @@ Content-Type: application/json
     "imageUrl": "product1.png"
 }
 
-###
+### Delete
 DELETE {{Catalog_HostAddress}}/10
 Content-Type: application/json
+
+
+
+### Support AI
+
+GET {{Catalog_HostAddress}}/support/hello
+Accept: application/json

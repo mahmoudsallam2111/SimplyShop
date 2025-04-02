@@ -7,10 +7,9 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 var sqlServer = builder
                     .AddSqlServer("sqlServer")
-                    .WithDataVolume()
+                    //.WithDataVolume()
                     .WithEnvironment("ACCEPT_EULA", "Y")
                     .WithLifetime(ContainerLifetime.Persistent);
-
 
 
 var catalogDb = sqlServer.AddDatabase("catalogdb");
@@ -18,21 +17,41 @@ var catalogDb = sqlServer.AddDatabase("catalogdb");
 
 var redisDb = builder.AddRedis("cache")
                      .WithRedisInsight()
-                     .WithDataVolume()
+                    // .WithDataVolume()
                      .WithLifetime(ContainerLifetime.Persistent);
 
 
 
 var rabbitmq = builder.AddRabbitMQ("rabbitmq")
                      .WithManagementPlugin()
-                     .WithDataVolume()
+                    // .WithDataVolume()
                      .WithLifetime(ContainerLifetime.Persistent);
 
 
 
-var keyClock = builder.AddKeycloak("keyClock" , 8080 )
-                     .WithDataVolume()
+var keyClock = builder.AddKeycloak("keyClock" , 8080)
+                     //.WithDataVolume()
                      .WithLifetime(ContainerLifetime.Persistent);
+
+
+
+var ollama = builder
+                .AddOllama("ollama", 11434)
+                .WithDataVolume()
+                .WithLifetime(ContainerLifetime.Persistent)
+                .WithOpenWebUI();
+
+var llama = ollama.AddModel("llama3.2");
+
+
+// i.e local development mode , cause Azure Container Apps do not support persistent storage volumes
+if (builder.ExecutionContext.IsRunMode)
+{
+    sqlServer.WithDataVolume();
+    redisDb.WithDataVolume();
+    rabbitmq.WithDataVolume();
+    keyClock.WithDataVolume();
+}
 
 #endregion
 
@@ -41,8 +60,10 @@ var keyClock = builder.AddKeycloak("keyClock" , 8080 )
 var catalog =  builder.AddProject<Projects.Catalog>("catalog")
                       .WithReference(catalogDb)
                       .WithReference(rabbitmq)
+                      .WithReference(llama)
                       .WaitFor(catalogDb)
-                      .WaitFor(rabbitmq);
+                      .WaitFor(rabbitmq)
+                      .WaitFor(llama);
 
 var basket =  builder.AddProject<Projects.Basket>("basket")
                      .WithReference(redisDb)

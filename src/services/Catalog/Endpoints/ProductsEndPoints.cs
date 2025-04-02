@@ -63,5 +63,16 @@ public static class ProductsEndPoints
         .Produces(StatusCodes.Status404NotFound)
         .Produces(StatusCodes.Status204NoContent);
 
+
+        // support assistant
+        group.MapGet("/support/{query}", async (string query, AIAssistance service) =>
+        {
+            var response = await service.SupportAsync(query);
+
+            return Results.Ok(response);
+        })
+              .WithName("Support")
+              .Produces(StatusCodes.Status200OK);
+
     }
 }
