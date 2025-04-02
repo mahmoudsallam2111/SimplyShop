@@ -1,26 +1,28 @@
 @Basket_HostAddress = https://localhost:7051/basket
+@access_token = eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJJaFFjWHpPTmxGc1pUalBkdl9JRjRIQUlhRXBuY0kwTDllYkhSajZ1V2tnIn0.eyJleHAiOjE3NDM2MDQ1NTMsImlhdCI6MTc0MzYwNDI1MywianRpIjoiZmI0NGI1NTctZjdlZC00NjI3LThmZDAtODY2NzEyODM4MTdhIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9TaW1wbHlTaG9wIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjkxMTIwYmZkLWQ3MzQtNGFjMS1hZWJkLTNlODQxNTY2YjBlMyIsInR5cCI6IkJlYXJlciIsImF6cCI6InNpbXBseS1zaG9wLWNsaWVudCIsInNpZCI6ImYxYjI5YjZhLWI1YjgtNDM0Ny1iYTFhLTU5YzI1M2IwNTJiNSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtc2ltcGx5c2hvcCIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6Im9wZW5pZCBlbWFpbCBwcm9maWxlIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJUZXN0IFRlc3QiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJ0ZXN0IiwiZ2l2ZW5fbmFtZSI6IlRlc3QiLCJmYW1pbHlfbmFtZSI6IlRlc3QiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20ifQ.FQwBBbeBmidgS9Cc-AyfkYQoJUwqBDKaXdbZrpPjbBQaqVPLNVR_lK1abcyjKah77TDZOWqNP1b2XBBAOD-wmoSLAJz5QFOXgRnHc0X3UdNzKhxL78JCa7gNpW3yDt2jXLTmBDW7IqZoFzO3BOvnPW2uACpqlEKxGeZI2qIKEL2glIg88YqUSRnOHigacKOY4X2ciK7wejkzUeZYgNuFRKBHtxwzO1WI1EH934DbXjh7OeJzgCYHomeq6ITXTshjSYXdZ39l_TlMGhy5XLbf27UvIi6C_m0UhP6LGFVyveSbd1XyGA4R8BYwaGOEoD5R7xHvvduS8pIDcKd6PDHPuA
 
 GET {{Basket_HostAddress}}/mahmoud
 Accept: application/json
-
+Authorization: Bearer {{access_token}}
 ###
 
 POST {{Basket_HostAddress}}
 Content-Type: application/json
+Authorization: Bearer {{access_token}}
 {
     "UserName": "mahmoud",
     "shoppingCartItems": [
         {
         "Quantity": 2,
         "Color": "Red",
-        "Price": 200,
+        "Price": 0,
         "ProductId": 1,
         "ProductName": "Solar Powered Flashlight"
         },
         {
         "Quantity": 1,
         "Color": "Blue",
-        "Price": 300,
+        "Price": 0,
         "ProductId": 2,
         "ProductName": "Hiking Poles"
         }
@@ -62,5 +64,11 @@ Content-Type: application/json
 
 DELETE {{Basket_HostAddress}}/mahmoud
 Content-Type: application/json
+Authorization: Bearer {{access_token}}
 ###
 
+
+POST http://localhost:8080/realms/SimplyShop/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password&client_id=simply-shop-client&scope=email openid&username=test&password=123456

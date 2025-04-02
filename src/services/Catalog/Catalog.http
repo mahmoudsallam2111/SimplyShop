@@ -20,12 +20,12 @@ Content-Type: application/json
 }
 ###
 
-PUT {{Catalog_HostAddress}}/5
+PUT {{Catalog_HostAddress}}/1
 Content-Type: application/json
 {    
-    "name": "IPhone",
+    "name": "samsung",
     "description": "A fantastic product for outdoor enthusiasts",
-    "price": 5.99,
+    "price": 888,
     "imageUrl": "product1.png"
 }
 

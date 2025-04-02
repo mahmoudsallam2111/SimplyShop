@@ -1,14 +1,19 @@
 ﻿using Catalog.Data.repositories;
 using Catalog.Models;
+using MassTransit;
+using ServiceDefaults.Messaging.Events;
 
 namespace Catalog.Services
 {
     public class ProductService
     {
         private readonly IProductRepository _productRepository;
-        public ProductService(IProductRepository productRepository)
+        private readonly IBus _bus;
+
+        public ProductService(IProductRepository productRepository , IBus bus)
         {
             _productRepository = productRepository;
+            _bus = bus;
         }
         public async Task<IEnumerable<Product>> GetProductsAsync()
         {
@@ -22,9 +27,31 @@ namespace Catalog.Services
         {
             await _productRepository.CreateProductAsync(product);
         }
-        public async Task UpdateProductAsync(Product product)
+        public async Task UpdateProductAsync(Product productToUpdate, Product inputProduct)
         {
-            await _productRepository.UpdateProductAsync(product);
+            if (productToUpdate.Price != inputProduct.Price)
+            {
+                    var integrationEvent = new ProductPriceChangedIntegrationEvent
+                    {
+                        ProductId = productToUpdate.Id,
+                        Name = inputProduct.Name,
+                        Price = inputProduct.Price,
+                        Description = inputProduct.Description,
+                        ImageUrl = inputProduct.ImageUrl,
+                    };
+
+                   await _bus.Publish(integrationEvent);
+            }
+
+            productToUpdate.Name = inputProduct.Name;
+            productToUpdate.Description = inputProduct.Description;
+            productToUpdate.Price = inputProduct.Price;
+            productToUpdate.ImageUrl = inputProduct.ImageUrl;
+
+            // raise integraion Event if price has changed
+
+            await _productRepository.UpdateProductAsync(productToUpdate);
+
         }
         public async Task DeleteProductAsync(int id)
         {

@@ -1,0 +1,72 @@
+﻿@page "/products"
+@inject CatalogApiClient CatalogApiClient
+@attribute [StreamRendering(true)]
+@attribute [OutputCache(Duration = 10)]
+
+<PageTitle>Products</PageTitle>
+
+<h1 class="text-primary">Our Products</h1>
+
+<p>Browse through our collection of premium outdoor products.</p>
+
+@if (isLoading)
+{
+    <p><em>Loading products...</em></p>
+}
+else if (products is null || products.Count == 0)
+{
+    <p class="text-danger"><em>Unable to load products. Please try again later.</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in products)
+            {
+                <tr>
+                    <td>
+                        <img height="80" width="80" class="rounded" 
+                             src="@GetImageUrl(product.ImageUrl)" 
+                             alt="@product.Name" />
+                    </td>
+                    <td>@product.Name</td>
+                    <td>@product.Description</td>
+                    <td>@product.Price.ToString("C2")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Product>? products;
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            products = await CatalogApiClient.GetProducts();
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error loading products: {ex.Message}");
+            products = null;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private string GetImageUrl(string imageUrl) =>
+        $"https://raw.githubusercontent.com/MicrosoftDocs/mslearn-dotnet-cloudnative/main/dotnet-docker/Products/wwwroot/images/{imageUrl}";
+}

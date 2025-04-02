@@ -42,16 +42,11 @@ public static class ProductsEndPoints
         // PUT (Update)
         group.MapPut("/{id}", async (int id, Product inputProduct, ProductService service) =>
         {
-            var updatedProduct = await service.GetProductAsync(id);
+            var productToUpdate = await service.GetProductAsync(id);
 
-            updatedProduct.Name = inputProduct.Name;
-            updatedProduct.Description = inputProduct.Description;
-            updatedProduct.Price = inputProduct.Price;
-            updatedProduct.ImageUrl = inputProduct.ImageUrl;
+            if (productToUpdate is null) return Results.NotFound();
 
-            if (updatedProduct is null) return Results.NotFound();
-
-            await service.UpdateProductAsync(updatedProduct);
+            await service.UpdateProductAsync(productToUpdate , inputProduct);
             return Results.NoContent();
         })
         .WithName("UpdateProduct")

@@ -29,7 +29,7 @@ namespace Catalog.Data.Repositories
 
         public async Task<Product?> GetProductAsync(int id)
         {
-            var product = await _dbContext.Products.FindAsync(id);
+            var product = await _dbContext.Products.Where(p=>p.Id == id).FirstOrDefaultAsync();
             return product;
         }
 
@@ -40,7 +40,7 @@ namespace Catalog.Data.Repositories
 
         public async Task<Product> UpdateProductAsync(Product product)
         {
-           _dbContext.Entry<Product>(product).State = EntityState.Modified;
+            _dbContext.Products.Update(product);
             await _dbContext.SaveChangesAsync();
             return product;
         }

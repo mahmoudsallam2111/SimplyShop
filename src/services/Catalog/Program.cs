@@ -2,6 +2,7 @@ using Catalog.Data;
 using Catalog.Endpoints;
 using Catalog.Services;
 using ServiceDefaults;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,9 @@ builder.AddSqlServerDbContext<CatalogDbContext>(connectionName: "catalogdb");
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddCatalogServices();
 
+
+
+builder.Services.AddMassTransit(Assembly.GetExecutingAssembly());
 
 var app = builder.Build();
 
