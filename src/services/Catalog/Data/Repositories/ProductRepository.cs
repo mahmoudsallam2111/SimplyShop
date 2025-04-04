@@ -44,5 +44,14 @@ namespace Catalog.Data.Repositories
             await _dbContext.SaveChangesAsync();
             return product;
         }
+
+
+        public async Task<IEnumerable<Product>> GetMatchingProduct(string query)
+        {
+            return await _dbContext.Products
+                .Where(p => p.Name.Contains(query))
+                .ToListAsync();      
+        }
+
     }
 }

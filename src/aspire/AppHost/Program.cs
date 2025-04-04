@@ -42,6 +42,7 @@ var ollama = builder
                 .WithOpenWebUI();
 
 var llama = ollama.AddModel("llama3.2");
+var embedding = ollama.AddModel("all-minilm");
 
 
 // i.e local development mode , cause Azure Container Apps do not support persistent storage volumes
@@ -61,9 +62,11 @@ var catalog =  builder.AddProject<Projects.Catalog>("catalog")
                       .WithReference(catalogDb)
                       .WithReference(rabbitmq)
                       .WithReference(llama)
+                      .WithReference(embedding)
                       .WaitFor(catalogDb)
                       .WaitFor(rabbitmq)
-                      .WaitFor(llama);
+                      .WaitFor(llama)
+                      .WaitFor(embedding);
 
 var basket =  builder.AddProject<Projects.Basket>("basket")
                      .WithReference(redisDb)

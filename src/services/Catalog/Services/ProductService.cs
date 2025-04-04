@@ -57,5 +57,10 @@ namespace Catalog.Services
         {
             await _productRepository.DeleteProductAsync(id);
         }
+
+        public async Task<IEnumerable<Product>> SearchProductAsync(string query)
+        {
+            return await _productRepository.GetMatchingProduct(query);
+        }
     }
 }

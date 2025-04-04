@@ -1,6 +1,8 @@
 using Catalog.Data;
 using Catalog.Endpoints;
+using Catalog.Models;
 using Catalog.Services;
+using Microsoft.SemanticKernel;
 using ServiceDefaults;
 using System.Reflection;
 
@@ -14,8 +16,15 @@ builder.AddServiceDefaults();
 // connect and register the catalog database
 builder.AddSqlServerDbContext<CatalogDbContext>(connectionName: "catalogdb");
 
-//ollama 
+//ollama  
 builder.AddOllamaSharpChatClient("ollama-llama3-2");
+
+
+// embedding 
+builder.AddOllamaSharpEmbeddingGenerator("ollama-all-minilm");
+
+// vector store
+builder.Services.AddInMemoryVectorStoreRecordCollection<int, ProductVector>("products");
 
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<AIAssistance>();

@@ -9,4 +9,5 @@ public interface IProductRepository
     Task CreateProductAsync(Product product);
     Task<Product> UpdateProductAsync(Product product);
     Task DeleteProductAsync(int id);
+    Task<IEnumerable<Product>> GetMatchingProduct(string query);
 }
